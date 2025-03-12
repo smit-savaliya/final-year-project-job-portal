@@ -56,27 +56,62 @@ const registerCompany  =  async (req , res) => {
 
 //company login
 const loginCompany = async (req , res)=>{
-    const {email , password } = req.body
-    try {
-        const company = await Company.findOne({email})
+    // const {email , password } = req.body
+    // try {
+    //     const company = await Company.findOne({email})
+    //     if(!email || !password){
+    //         return res.json({success:false ,message:"Something is missing" })
+    //     }
 
-        if(bcrypt.compare(password , company.password)){
-            res.json({
-                success:true , 
-                company:{
-                    _id:company._id,
-                    name:company.name,
-                    email:company.email,
-                    image:company.image
-                },
-                token:generateToken(company._id)
-            })
-        }else{
-            res.json({success:false , message:"Invalid  Email or Password"})
-        }
-    } catch (error) {
-            res.json({success:false , message:error.message})
+    //     if(bcrypt.compare(password , company.password)){
+    //         res.json({
+    //             success:true , 
+    //             company:{
+    //                 _id:company._id,
+    //                 name:company.name,
+    //                 email:company.email,
+    //                 image:company.image
+    //             },
+    //             token:generateToken(company._id)
+    //         })
+    //     }else{
+    //         res.json({success:false , message:"Invalid  Email or Password"})
+    //     }
+
+    // } catch (error) {
+    //         res.json({success:false , message:error.message})
+    // }
+
+    const { email, password } = req.body;
+
+  try {
+    // Find the company by email
+    const company = await Company.findOne({ email });
+    if (!company) {
+      return res.json({ success: false, message: "Invalid Email or Password" });
     }
+
+    // Compare passwords
+    const isMatch = await bcrypt.compare(password, company.password);
+    if (!isMatch) {
+      return res.json({ success: false, message: "Invalid Email or Password" });
+    }
+
+    // If password matches, send success response
+    res.json({
+      success: true,
+      company: {
+        _id: company._id,
+        name: company.name,
+        email: company.email,
+        image: company.image,
+      },
+      token: generateToken(company._id),
+    });
+  } catch (error) {
+    console.error("Login error:", error.message); // Log for debugging
+    res.json({ success: false, message: "Server error during login" });
+  }
 }
 
 //get company data
