@@ -6,10 +6,12 @@ import { clerkwebhooks } from "./controller/webhooks.js"
 import companyRouter from "./routes/companyRoutes.js"
 import connectCloudinary from "./config/cloudinary.js"
 import jobRouter from "./routes/jobRoutes.js"
+import userRouter from "./routes/userRoutes.js"
 
 const app = express()
 
 await connectCloudinary()
+
 
 //middleware
 app.use(cors())
@@ -24,6 +26,8 @@ app.post("/webhooks", clerkwebhooks)
 app.use("/api/company" , companyRouter)
 
 app.use("/api/jobs" , jobRouter)
+
+app.use("/api/users" , userRouter)
 
 const PORT = process.env.PORT || 5000
 

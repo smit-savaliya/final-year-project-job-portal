@@ -7,7 +7,7 @@ const jobRouter = express.Router()
 //get all job data
 jobRouter.get("/" , getJobs)
 
-//get a single job datay
+//get a single job data
 jobRouter.get("/:id" , getJobById)
 
 

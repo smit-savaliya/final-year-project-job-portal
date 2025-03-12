@@ -126,7 +126,16 @@ const getCompanyJobApplicants = async(req , res)=>{
 
 //get company posted job
 const getCompanyPostedJobs = async(req,res)=>{
+        try {
+            const companyId = req.company._id 
+            const jobs = await Job.find({companyId})
 
+            //adding no of applicants info  
+            
+            res.json({success:true , jobsData:jobs})
+        } catch (error) {
+            res.json({success:false , message:error.message})
+        }
 }
 
 //chaneg job Application status
@@ -135,7 +144,22 @@ const ChangeJobApplicationStatus = async(req,res)=>{
 }
 
 const changeVisibility = async (req,res)=>{
+        try {
+           const {id} = req.body 
+           const companyId = req.company._id 
+           const job = await Job.findById(id)
 
+           if(companyId.toString() === job.companyId.toString()){
+            job.visible = !job.visible
+           }
+
+           await job.save()
+
+           res.json({success:true , job})
+            
+        } catch (error) {
+            res.json({success:false , message:error.message})
+        }
 }
 
 export {registerCompany,loginCompany , companyData, postJob , getCompanyJobApplicants , getCompanyPostedJobs , ChangeJobApplicationStatus, changeVisibility}

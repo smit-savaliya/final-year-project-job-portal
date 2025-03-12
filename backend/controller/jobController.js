@@ -17,7 +17,7 @@ const getJobs = async (req , res) =>{
 
 const getJobById = async (req , res) => {
         try {
-            const {id} = req.params
+            const {id} =await  req.params
             console.log("feching job id", id)
 
             const job = await Job.findById(id)
