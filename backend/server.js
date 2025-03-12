@@ -17,7 +17,7 @@ await connectCloudinary()
 //middleware
 app.use(cors({ origin: "http://localhost:5173" }))
 app.use(express.json())
-// app.use(clerkMiddleware())
+
 
 
 //routes
@@ -31,6 +31,15 @@ app.use("/api/company" , companyRouter)
 app.use("/api/jobs" , jobRouter)
 
 app.use("/api/users" , userRouter)
+
+app.use(clerkMiddleware())
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    next();
+});
+
 
 const PORT = process.env.PORT || 5000
 

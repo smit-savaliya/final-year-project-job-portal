@@ -5,7 +5,9 @@ export const AppContex = createContext(null)
 
 const AppContextProvider = (props) => {
 
-    const backendurl = "http://localhost/5050"
+    const backendurl = "http://localhost/5050" || import.meta.env.BACKEND_URL
+    // const backendurl = import.meta.env.BACKEND_URL
+    console.log("backend url:", { backendurl });
 
     const [searchFilter , setSearchFilter]= useState({
         title:"",
@@ -44,7 +46,7 @@ const AppContextProvider = (props) => {
         companyData , setCompanyData,
         backendurl
     }
-    console.log("AppContext providing:", { showRecruiterLogin, backendurl });
+    
 
     return (<AppContex.Provider value={value}>
         {props.children}

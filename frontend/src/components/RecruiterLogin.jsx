@@ -25,19 +25,23 @@ const RecruiterLogin = () => {
     }
 
     try {
-      if(state === "Login"){
-        const {data} = await axios.post(backendurl + "/api/company/login", {email , password})
-
+      if(state=== "Login"){
+        const {data} = await axios.post(backendurl+"/api/company/login" , {email , password})
         if(data.success){
           console.log(data)
-          console.log("smit savaliya")
         }
       }
     } catch (error) {
       console.log(error)
     }
 
-  }
+
+
+
+
+   
+
+}
 
   useEffect(()=>{
     document.body.style.overflow = "hidden"
