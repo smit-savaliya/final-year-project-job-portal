@@ -5,7 +5,7 @@ export const AppContex = createContext(null)
 
 const AppContextProvider = (props) => {
 
-    const backendurl = "http://localhost/5050" || import.meta.env.BACKEND_URL
+    const backendurl =  import.meta.env.BACKEND_URL || "http://localhost:5050"
     // const backendurl = import.meta.env.BACKEND_URL
     console.log("backend url:", { backendurl });
 

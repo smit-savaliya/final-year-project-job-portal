@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { assets } from '../assets/assets'
-import { AppContex } from '../context/AppContext'
+import { AppContex } from '../context/AppContext.jsx'
 import axios from "axios"
 
 const RecruiterLogin = () => {
@@ -24,16 +24,49 @@ const RecruiterLogin = () => {
       setIsTextDataSubmited(true)
     }
 
+    // try {
+    //   if(state=== "Login"){
+    //     const {data} = await axios.post(backendurl+"/api/company/login" , {email , password})
+    //     if(data.success){
+    //       console.log(data)
+    //     }
+    //   }
+    // } catch (error) {
+    //   console.log(error)
+    // }
     try {
-      if(state=== "Login"){
-        const {data} = await axios.post(backendurl+"/api/company/login" , {email , password})
-        if(data.success){
-          console.log(data)
+      if (state === "Login") {
+        const loginUrl = `${backendurl}/api/company/login`;
+        console.log("Sending request to:", loginUrl); // Confirm URL
+        console.log("Payload:", { email, password }); // Confirm data
+
+        const { data } = await axios.post(loginUrl, { email, password }, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        console.log("Response:", data); // Log full response
+        if (data.success) {
+          console.log("Login successful:", data);
+          console.log("smit savaliya"); // Add back your victory log
+        } else {
+          console.log("Login failed:", data.message);
         }
       }
     } catch (error) {
-      console.log(error)
+      console.error("Axios error:", error.message);
+      console.error("Error code:", error.code);
+      if (error.response) {
+        console.error("Server response:", error.response.data);
+        console.error("Status:", error.response.status);
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+      } else {
+        console.error("Error config:", error.config);
+      }
     }
+  };
 
 
 
@@ -41,7 +74,7 @@ const RecruiterLogin = () => {
 
    
 
-}
+
 
   useEffect(()=>{
     document.body.style.overflow = "hidden"
