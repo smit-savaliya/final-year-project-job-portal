@@ -63,7 +63,7 @@ const loginCompany = async (req , res)=>{
             return res.json({success:false ,message:"Something is missing" })
         }
 
-        if(bcrypt.compare(password , company.password)){
+        if(await bcrypt.compare(password , company.password)){
             res.json({
                 success:true , 
                 company:{
@@ -72,7 +72,8 @@ const loginCompany = async (req , res)=>{
                     email:company.email,
                     image:company.image
                 },
-                token:generateToken(company._id)
+                token:generateToken(company._id),
+                message:`Welcome Back , ${company.name}`
             })
         }else{
             res.json({success:false , message:"Invalid  Email or Password"})

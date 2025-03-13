@@ -2,8 +2,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import { assets } from '../assets/assets'
 import { AppContex } from '../context/AppContext.jsx'
 import axios from "axios"
+import {useNavigate} from "react-router-dom"
+import { toast } from 'react-toastify'
 
 const RecruiterLogin = () => {
+
+  const navigate = useNavigate()
 
   const [state, setState] = useState("Login")
   const [name, setName] = useState("")
@@ -14,66 +18,58 @@ const RecruiterLogin = () => {
   const [image, setImage] = useState(false)
   const [isTextDataSubmited, setIsTextDataSubmited] = useState(false)
 
-  const {setShowRecruiterLogin , backendurl} = useContext(AppContex)
+  const {setShowRecruiterLogin , backendurl ,setCompanyToken , setCompanyData } = useContext(AppContex)
 
   console.log("RecruiterLogin - backendurl:", backendurl);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault()
     if(state == "Sign Up" && !isTextDataSubmited){
-      setIsTextDataSubmited(true)
+      return setIsTextDataSubmited(true)
     }
 
-    // try {
-    //   if(state=== "Login"){
-    //     const {data} = await axios.post(backendurl+"/api/company/login" , {email , password})
-    //     if(data.success){
-    //       console.log(data)
-    //     }
-    //   }
-    // } catch (error) {
-    //   console.log(error)
-    // }
     try {
-      if (state === "Login") {
-        const loginUrl = `${backendurl}/api/company/login`;
-        console.log("Sending request to:", loginUrl); // Confirm URL
-        console.log("Payload:", { email, password }); // Confirm data
+      if(state=== "Login"){
+        const {data} = await axios.post(backendurl+"/api/company/login" , {email , password})
+        if(data.success){
+          // console.log(data)
+          setCompanyData(data.company)
+          setCompanyToken(data.token)
+          localStorage.setItem('companyToken' , data.token)
+          setShowRecruiterLogin(false)
+          navigate("/dashboard")
+          toast.success(data.message)
 
-        const { data } = await axios.post(loginUrl, { email, password }, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        }else{
+          toast.error(data.message)
+        }
 
-        console.log("Response:", data); // Log full response
-        if (data.success) {
-          console.log("Login successful:", data);
-          console.log("smit savaliya"); // Add back your victory log
-        } else {
-          console.log("Login failed:", data.message);
+      }else{
+        const formData = new FormData()
+        formData.append("name" ,name)
+        formData.append("password", password)
+        formData.append("email",email)
+        formData.append("image", image)
+
+        const {data} = await axios.post(backendurl+"/api/company/register", formData)
+        if(data.success){
+          // console.log(data)
+          setCompanyData(data.company)
+          setCompanyToken(data.token)
+          localStorage.setItem('companyToken' , data.token)
+          setShowRecruiterLogin(false)
+          navigate("/dashboard")
+          toast.success(data.message)
+
+        }else{
+          toast.error(data.message)
         }
       }
     } catch (error) {
-      console.error("Axios error:", error.message);
-      console.error("Error code:", error.code);
-      if (error.response) {
-        console.error("Server response:", error.response.data);
-        console.error("Status:", error.response.status);
-      } else if (error.request) {
-        console.error("No response received:", error.request);
-      } else {
-        console.error("Error config:", error.config);
-      }
+      toast.error(error.message)
     }
+    
   };
-
-
-
-
-
-   
-
 
 
   useEffect(()=>{

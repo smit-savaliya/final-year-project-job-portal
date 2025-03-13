@@ -1,12 +1,44 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { manageJobsData } from '../assets/assets'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
+import { AppContex } from '../context/AppContext'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const ManageJobs = () => {
 
   const navigate = useNavigate()
-  return (
+
+  const [jobs , setJobs] = useState(false)
+
+  const {backendurl , companuToken} = useContext(AppContex)
+
+  //function to fetch company job applicatoins data 
+  const fetchCompanyJobs = async () => {
+
+        try {
+          const {data} = await axios.get(backendurl+"/api/company/list-jobs" , {headers:{token:companuToken}})
+
+          if(data.success){
+            setJobs(data.jobsData.reverce())
+            console.log(data.jobsData)
+          }else{
+            toast.error(data.message)
+            console.log(data.error)
+          }
+
+        } catch (error) {
+          toast.error(error.message)
+        }
+
+  }
+
+  useEffect(()=>{
+      fetchCompanyJobs()
+  } , [companuToken])
+
+   return (
     <div className='container p-4 max-w-5xl'>
       <div className='overflow-x-auto'>
         <table className='min-w-full bg-white border border-gray-200 max-sm:text-sm'>
