@@ -3,6 +3,7 @@ import bcrypt from  "bcrypt"
 import {v2 as cloudinary} from "cloudinary"
 import generateToken from "../utils/generateToken.js"
 import Job from "../models/Job.js"
+import JobApplication from "../models/jobApplication.js"
 
 
 //register a new company
@@ -128,7 +129,22 @@ const postJob = async (req , res)=>{
 
 //get company job applicants
 const getCompanyJobApplicants = async(req , res)=>{
+        try {
+            const companyId = req.company._id 
 
+            //find job applications for the user and populate releted data
+            const applications = await JobApplication.find({companyId})
+            .populate("userId", "name image resume")
+            .populate("jobId" , "title location category level salary")
+            .exec()
+
+            return  res.json({success:true , applications})
+
+
+            
+        } catch (error) {
+                res.json({success:false , message:error.message})
+        }
 }
 
 //get company posted job
@@ -137,9 +153,15 @@ const getCompanyPostedJobs = async(req,res)=>{
             const companyId = req.company._id 
             const jobs = await Job.find({companyId})
 
-            //adding no of applicants info  
+            //adding no. of applicants info
+            const jobsData = await Promise.all(jobs.map(async (job) => {
+                    const applicants = await JobApplication.find({jobId:job._id})
+                    return {...job.toObject(),applicants:applicants.length}
+            }))
+
+
             
-            res.json({success:true , jobsData:jobs})
+            res.json({success:true , jobsData})
         } catch (error) {
             res.json({success:false , message:error.message})
         }
@@ -147,7 +169,15 @@ const getCompanyPostedJobs = async(req,res)=>{
 
 //chaneg job Application status
 const ChangeJobApplicationStatus = async(req,res)=>{
+        try {
+            const {id , status} = req.body 
+         //find job application and update status
+         await JobApplication.findOneAndUpdate({_id: id}, {status})
 
+         res.json({success:true , message:"Status Changed"})
+        } catch (error) {
+            res.json({success:false , message:error.message})
+        }
 }
 
 const changeVisibility = async (req,res)=>{

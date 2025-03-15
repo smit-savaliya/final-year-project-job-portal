@@ -1,7 +1,8 @@
-import { createContext, useEffect, useState } from "react";
-import { jobsData } from "../assets/assets";
+import { createContext, useEffect, useReducer, useState } from "react";
+
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useAuth, useUser } from "@clerk/clerk-react";
 
 export const AppContex = createContext(null)
 
@@ -9,7 +10,9 @@ const AppContextProvider = (props) => {
 
     const backendurl =  import.meta.env.BACKEND_URL || "http://localhost:5050"
     // const backendurl = import.meta.env.BACKEND_URL
-    console.log("backend url:", { backendurl });
+    // console.log("backend url:", { backendurl });
+    const   {user} = useUser()
+    const {getToken}= useAuth()
 
     const [searchFilter , setSearchFilter]= useState({
         title:"",
@@ -25,10 +28,26 @@ const AppContextProvider = (props) => {
     const [companyToken , setCompanyToken] = useState(null)
     const [companyData , setCompanyData] = useState(null)
 
+    const [userData , setUserData] = useState(null)
+    const [userApplications , setUserApplications] = useState([])
+
 
     //fetch the job data
     const fetchJobs = async ()=>{
-        setJobs(jobsData)
+        try {
+            
+            const {data} = await axios.get(backendurl+"/api/jobs")
+            if(data.success){
+                setJobs(data.jobs)
+                console.log(data.jobs)
+            }else{
+                toast.error(data.message )
+            }
+
+        } catch (error) {
+            toast.error(error.message)
+        }
+        // setJobs(jobsData)
     }
 
     //fetch the company data
@@ -43,6 +62,43 @@ const AppContextProvider = (props) => {
             }
         } catch (error) {
         toast.error(error.message)
+        }
+    }
+
+    //fetch user data
+    const fetchUserData = async () => {
+        try {
+            const token = await getToken()
+            const {data} = await axios.get(backendurl+"/api/users/user" , {
+                headers:{Authorization:`Bearer ${token}`}
+            })
+
+            if(data.success){
+                setUserData(data.user)
+
+            }else{
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(data.message)
+        }
+    }
+
+    //fetch user's applied applications data
+    const fetchUserApplications = async () => {
+        try {
+            
+            const token = await getToken()
+            const {data} = await axios.get(backendurl+"/api/users/application", 
+                {headers:{Authorization:`Bearer ${token}`}}
+            )
+            if(data.success){
+                setUserApplications(data.applications)
+            }else{
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
         }
     }
 
@@ -61,6 +117,15 @@ const AppContextProvider = (props) => {
         }
     },[companyToken])
 
+    useEffect(()=>{
+
+        if(user){
+            fetchUserData()
+            fetchUserApplications()
+        }
+
+    }, [user])
+
 
     const value={
 
@@ -72,7 +137,10 @@ const AppContextProvider = (props) => {
         showRecruiterLogin, setShowRecruiterLogin,
         companyToken , setCompanyToken,
         companyData , setCompanyData,
-        backendurl
+        backendurl,
+        userData , setUserData , 
+        userApplications , setUserApplications,
+        fetchUserData, fetchUserApplications
     }
     
 
