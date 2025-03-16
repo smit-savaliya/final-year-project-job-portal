@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { use, useContext, useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import { assets, jobsApplied } from '../assets/assets'
 import moment from 'moment'
@@ -16,7 +16,7 @@ function Application() {
 
   const [resume , setResume] = useState(null)
 
-  const  {backendurl, userData , userApplications ,fetchUserData} = useContext(AppContex)
+  const  {backendurl, userData , userApplications ,fetchUserData , fetchUserApplications} = useContext(AppContex)
 
   const updateResume = async () => {
 
@@ -44,6 +44,12 @@ function Application() {
       setResume(null)
 
   }
+
+  useEffect(()=>{
+      if(user){
+        fetchUserApplications()
+      }
+  }, [user])
   return (
     <>
       <Navbar/>
@@ -62,7 +68,7 @@ function Application() {
               </>
               :
               <div className='flex gap-2'>
-                <a className='bg-blue-100 text-blue-600 px-4 py-2 rounded-lg' href="">
+                <a target='_blank' className='bg-blue-100 text-blue-600 px-4 py-2 rounded-lg' href={userData.resume}>
                   Resume
                 </a>
 

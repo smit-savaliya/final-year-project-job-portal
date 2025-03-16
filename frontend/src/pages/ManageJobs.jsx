@@ -5,12 +5,13 @@ import { useNavigate } from 'react-router-dom'
 import { AppContex } from '../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import Loading from '../components/Loading'
 
 const ManageJobs = () => {
 
   const navigate = useNavigate()
 
-  const [jobs , setJobs] = useState([])
+  const [jobs , setJobs] = useState(false)
 
   const {backendurl , companyToken} = useContext(AppContex)
 
@@ -60,7 +61,10 @@ const ManageJobs = () => {
       fetchCompanyJobs()
   } , [companyToken])
 
-   return (
+   return jobs ? jobs.length  === 0 ? (<div className='flex items-center justify-center h-[70vh]'>
+
+      <p className='text-xl sm:text-2xl'>No Jobs Availabel or posted.</p>
+   </div>) : (
     <div className='container p-4 max-w-5xl'>
       <div className='overflow-x-auto'>
         <table className='min-w-full bg-white border border-gray-200 max-sm:text-sm'>
@@ -96,7 +100,7 @@ const ManageJobs = () => {
         </div>
       </div>
     </div>
-  )
+  ) : <Loading/>
 }
 
 export default ManageJobs

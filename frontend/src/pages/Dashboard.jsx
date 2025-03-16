@@ -66,8 +66,8 @@ const Dashboard = () => {
           </ul>
         </div>
 
-        <div>
-          <Outlet />
+        <div className="flex-1 h-full p-2 sm:p-5 " >
+          <Outlet  />
         </div>
       </div>
 
