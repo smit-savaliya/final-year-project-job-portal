@@ -88,7 +88,7 @@ const ViewApplication = () => {
                     <a href={applicant.userId.resume} className='bg-blue-50 text-blue-400 px-3 py-1 rounded inline-flex gap-2 items-center' target='_blank'>Resume <img src={assets.resume_download_icon} alt="" /></a>
                   </td>
                   <td className='py-2 px-4 border-b relative'>
-                    {applicant.status === "Pending"
+                    {applicant.status === "pending"
                       ?
                       <div className='relative inline-block text-left group'>
                         <button className='text-gray-500 action-button'>...</button>
