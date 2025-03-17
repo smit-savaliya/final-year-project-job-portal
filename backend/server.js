@@ -8,6 +8,7 @@ import connectCloudinary from "./config/cloudinary.js"
 import jobRouter from "./routes/jobRoutes.js"
 import userRouter from "./routes/userRoutes.js"
 import {clerkMiddleware} from "@clerk/express"
+import { handleWebhook, sendMessageToDialogflow } from "./controller/chatBotController.js"
 
 const app = express()
 
@@ -32,6 +33,9 @@ app.use("/api/company" , companyRouter)
 app.use("/api/jobs" , jobRouter)
 
 app.use("/api/users" , userRouter)
+
+app.post("/api/chatbot/webhook" , handleWebhook)
+app.post("/api/chatbot/message" , sendMessageToDialogflow)
 
 
 app.use((req, res, next) => {
