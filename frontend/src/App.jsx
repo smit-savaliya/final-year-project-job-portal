@@ -12,6 +12,7 @@ import ViewApplication from './pages/ViewApplication.jsx'
 import "quill/dist/quill.snow.css"
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css"
+import Chatbot from './components/Chatbot.jsx'
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
           
         </Route>
       </Routes>
+      <Chatbot/>
     </div>
   )
 }
