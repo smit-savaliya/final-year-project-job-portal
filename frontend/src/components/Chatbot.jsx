@@ -7,7 +7,7 @@ const Chatbot = () => {
   ]);
   const [input, setInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const backendurl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5050";
+  const backendurl = "https://job-portal-new-server-lake.vercel.app"
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
