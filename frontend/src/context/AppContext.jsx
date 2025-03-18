@@ -8,7 +8,7 @@ export const AppContex = createContext(null)
 
 const AppContextProvider = (props) => {
 
-    const backendurl =  import.meta.env.VITE_BACKEND_URL || "http://localhost:5050"
+    const backendurl =  import.meta.env.VITE_BACKEND_URL 
     // const backendurl = import.meta.env.BACKEND_URL
     console.log("backend url:", { backendurl });
     const   {user} = useUser()
