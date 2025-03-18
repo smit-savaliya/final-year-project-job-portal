@@ -18,13 +18,14 @@ await connectCloudinary()
 
 
 //middleware
-app.use(cors({ 
-    origin: ["https://final-year-new-client.vercel.app"],
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "token"],
-    credentials: true,
-
-}))
+app.use(
+    cors({
+      origin: ["http://localhost:5173", "https://final-year-new-client.vercel.app"], // Add your deployed frontend URL
+      methods: ["GET", "POST", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization", "token"],
+      credentials: true,
+    })
+  );
 app.use(express.json())
 app.use(clerkMiddleware())
 

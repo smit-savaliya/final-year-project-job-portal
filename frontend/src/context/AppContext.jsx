@@ -8,9 +8,9 @@ export const AppContex = createContext(null)
 
 const AppContextProvider = (props) => {
 
-    const backendurl =  "https://job-portal-new-server-lake.vercel.app"
+    const backendurl =  import.meta.env.VITE_BACKEND_URL || "http://localhost:5050"
     // const backendurl = import.meta.env.BACKEND_URL
-    // console.log("backend url:", { backendurl });
+    console.log("backend url:", { backendurl });
     const   {user} = useUser()
     const {getToken}= useAuth()
 
