@@ -1,4 +1,5 @@
 import Job from "../models/Job.js";
+import {GoogleGenerativeAI} from "@google/generative-ai"
 const chatBot = async(req , res)=>{
 
     // try {
