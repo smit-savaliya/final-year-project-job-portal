@@ -8,7 +8,7 @@ import connectCloudinary from "./config/cloudinary.js"
 import jobRouter from "./routes/jobRoutes.js"
 import userRouter from "./routes/userRoutes.js"
 import {clerkMiddleware} from "@clerk/express"
-import {GoogleGenerativeAI} from "@google/generative-ai"
+
 import chatBot from "./controller/chatBotController.js"
 
 
