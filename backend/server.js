@@ -19,7 +19,7 @@ await connectCloudinary()
 
 //middleware
 app.use(cors({ 
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173","https://final-year-new-client.vercel.app"],
     methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "token"],
     credentials: true,
