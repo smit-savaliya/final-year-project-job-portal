@@ -35,7 +35,7 @@ const handleDatabaseQuery = async (message, user) => {
     if (!user) {
       return "<p>Please log in to check your application status.</p>";
     }
-    const applications = await Application.find({ userId: user.id });
+    const applications = await jobApplication.find({ userId: user.id });
     if (applications.length > 0) {
       const appList = applications.map(app => `<li>${app.jobTitle}: ${app.status}</li>`).join("");
       return `<p>Your application statuses:</p><ul>${appList}</ul>`;
